@@ -112,7 +112,7 @@ int LuaVoxelManip::l_get_content_at(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, 1);
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	lua_Integer cid = vm->m_data[i].getContent();
 
 	lua_pushinteger(L, cid);
@@ -125,7 +125,7 @@ int LuaVoxelManip::l_set_content_at(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, 1);
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	content_t c = lua_tointeger(L, 3);
 
 	vm->m_data[i].setContent(c);
@@ -138,7 +138,7 @@ int LuaVoxelManip::l_get_content_at_helper(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	lua_Integer cid = vm->m_data[i].getContent();
 
 	lua_pushinteger(L, cid);
@@ -151,7 +151,7 @@ int LuaVoxelManip::l_set_content_at_helper(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	content_t c = lua_tointeger(L, 3);
 
 	vm->m_data[i].setContent(c);
@@ -416,7 +416,7 @@ int LuaVoxelManip::l_get_param2_at(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, 1);
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	lua_Integer param2 = vm->m_data[i].param2;
 
 	lua_pushinteger(L, param2);
@@ -429,7 +429,7 @@ int LuaVoxelManip::l_set_param2_at(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, 1);
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	u8 param2 = lua_tointeger(L, 3);
 
 	vm->m_data[i].param2 = param2;
@@ -442,7 +442,7 @@ int LuaVoxelManip::l_get_param2_at_helper(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	lua_Integer param2 = vm->m_data[i].param2;
 
 	lua_pushinteger(L, param2);
@@ -455,7 +455,7 @@ int LuaVoxelManip::l_set_param2_at_helper(lua_State *L)
 
 	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
 	MMVManip *vm = o->vm;
-	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer i = lua_tointeger(L, 2)-1;
 	u8 param2 = lua_tointeger(L, 3);
 
 	vm->m_data[i].param2 = param2;
