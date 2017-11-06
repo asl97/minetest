@@ -72,8 +72,12 @@ class LuaPerlinNoiseMap : public ModApiBase
 
 	static int l_get2dMap(lua_State *L);
 	static int l_get2dMap_flat(lua_State *L);
+	static int l_get2dMap_flat_helper(lua_State *L);
+	static int l_get2dMap_flat2(lua_State *L);
 	static int l_get3dMap(lua_State *L);
 	static int l_get3dMap_flat(lua_State *L);
+	static int l_get3dMap_flat_helper(lua_State *L);
+	static int l_get3dMap_flat2(lua_State *L);
 
 	static int l_calc2dMap(lua_State *L);
 	static int l_calc3dMap(lua_State *L);

@@ -58,7 +58,7 @@ int LuaVoxelManip::l_read_from_map(lua_State *L)
 	return 2;
 }
 
-int LuaVoxelManip::l_get_data(lua_State *L)
+int LuaVoxelManip::l_get_data2(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
@@ -104,6 +104,80 @@ int LuaVoxelManip::l_set_data(lua_State *L)
 	}
 
 	return 0;
+}
+
+int LuaVoxelManip::l_get_content_at(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, 1);
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer cid = vm->m_data[i].getContent();
+
+	lua_pushinteger(L, cid);
+	return 1;
+}
+
+int LuaVoxelManip::l_set_content_at(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, 1);
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	content_t c = lua_tointeger(L, 3);
+
+	vm->m_data[i].setContent(c);
+	return 0;
+}
+
+int LuaVoxelManip::l_get_content_at_helper(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer cid = vm->m_data[i].getContent();
+
+	lua_pushinteger(L, cid);
+	return 1;
+}
+
+int LuaVoxelManip::l_set_content_at_helper(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	content_t c = lua_tointeger(L, 3);
+
+	vm->m_data[i].setContent(c);
+	return 0;
+}
+
+int LuaVoxelManip::l_get_data(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	lua_newuserdata(L, 0);
+	lua_newtable(L);
+
+	lua_pushliteral(L, "__index");
+	lua_pushvalue(L, 1);
+	lua_pushcclosure(L, l_get_content_at_helper, 1);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "__newindex");
+	lua_pushvalue(L, 1);
+	lua_pushcclosure(L, l_set_content_at_helper, 1);
+	lua_settable(L, -3);
+
+	lua_setmetatable(L, -2);
+
+	return 1;
 }
 
 int LuaVoxelManip::l_write_to_map(lua_State *L)
@@ -288,7 +362,7 @@ int LuaVoxelManip::l_set_light_data(lua_State *L)
 	return 0;
 }
 
-int LuaVoxelManip::l_get_param2_data(lua_State *L)
+int LuaVoxelManip::l_get_param2_data2(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
@@ -334,6 +408,80 @@ int LuaVoxelManip::l_set_param2_data(lua_State *L)
 	}
 
 	return 0;
+}
+
+int LuaVoxelManip::l_get_param2_at(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, 1);
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer param2 = vm->m_data[i].param2;
+
+	lua_pushinteger(L, param2);
+	return 1;
+}
+
+int LuaVoxelManip::l_set_param2_at(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, 1);
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	u8 param2 = lua_tointeger(L, 3);
+
+	vm->m_data[i].param2 = param2;
+	return 0;
+}
+
+int LuaVoxelManip::l_get_param2_at_helper(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	lua_Integer param2 = vm->m_data[i].param2;
+
+	lua_pushinteger(L, param2);
+	return 1;
+}
+
+int LuaVoxelManip::l_set_param2_at_helper(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaVoxelManip *o = checkobject(L, lua_upvalueindex(1));
+	MMVManip *vm = o->vm;
+	lua_Integer i = lua_tointeger(L, 2);
+	u8 param2 = lua_tointeger(L, 3);
+
+	vm->m_data[i].param2 = param2;
+	return 0;
+}
+
+int LuaVoxelManip::l_get_param2_data(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	lua_newuserdata(L, 0);
+	lua_newtable(L);
+
+	lua_pushliteral(L, "__index");
+	lua_pushvalue(L, 1);
+	lua_pushcclosure(L, l_get_param2_at_helper, 1);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "__newindex");
+	lua_pushvalue(L, 1);
+	lua_pushcclosure(L, l_set_param2_at_helper, 1);
+	lua_settable(L, -3);
+
+	lua_setmetatable(L, -2);
+
+	return 1;
 }
 
 int LuaVoxelManip::l_update_map(lua_State *L)
@@ -454,6 +602,9 @@ const luaL_Reg LuaVoxelManip::methods[] = {
 	luamethod(LuaVoxelManip, read_from_map),
 	luamethod(LuaVoxelManip, get_data),
 	luamethod(LuaVoxelManip, set_data),
+	luamethod(LuaVoxelManip, get_content_at),
+	luamethod(LuaVoxelManip, set_content_at),
+	luamethod(LuaVoxelManip, get_data2),
 	luamethod(LuaVoxelManip, get_node_at),
 	luamethod(LuaVoxelManip, set_node_at),
 	luamethod(LuaVoxelManip, write_to_map),
@@ -465,6 +616,9 @@ const luaL_Reg LuaVoxelManip::methods[] = {
 	luamethod(LuaVoxelManip, set_light_data),
 	luamethod(LuaVoxelManip, get_param2_data),
 	luamethod(LuaVoxelManip, set_param2_data),
+	luamethod(LuaVoxelManip, get_param2_at),
+	luamethod(LuaVoxelManip, set_param2_at),
+	luamethod(LuaVoxelManip, get_param2_data2),
 	luamethod(LuaVoxelManip, was_modified),
 	luamethod(LuaVoxelManip, get_emerged_area),
 	{0,0}

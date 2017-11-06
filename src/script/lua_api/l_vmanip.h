@@ -44,6 +44,11 @@ private:
 	static int l_read_from_map(lua_State *L);
 	static int l_get_data(lua_State *L);
 	static int l_set_data(lua_State *L);
+	static int l_get_content_at(lua_State *L);
+	static int l_set_content_at(lua_State *L);
+	static int l_get_content_at_helper(lua_State *L);
+	static int l_set_content_at_helper(lua_State *L);
+	static int l_get_data2(lua_State *L);
 	static int l_write_to_map(lua_State *L);
 
 	static int l_get_node_at(lua_State *L);
@@ -59,6 +64,12 @@ private:
 
 	static int l_get_param2_data(lua_State *L);
 	static int l_set_param2_data(lua_State *L);
+
+	static int l_get_param2_at(lua_State *L);
+	static int l_set_param2_at(lua_State *L);
+	static int l_get_param2_at_helper(lua_State *L);
+	static int l_set_param2_at_helper(lua_State *L);
+	static int l_get_param2_data2(lua_State *L);
 
 	static int l_was_modified(lua_State *L);
 	static int l_get_emerged_area(lua_State *L);
