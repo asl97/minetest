@@ -183,7 +183,7 @@ int LuaPerlinNoiseMap::l_get2dMap(lua_State *L)
 }
 
 
-int LuaPerlinNoiseMap::l_get2dMap_flat(lua_State *L)
+int LuaPerlinNoiseMap::l_get2dMap_flat2(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
@@ -208,6 +208,41 @@ int LuaPerlinNoiseMap::l_get2dMap_flat(lua_State *L)
 	return 1;
 }
 
+int LuaPerlinNoiseMap::l_get2dMap_flat_helper(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaPerlinNoiseMap *o = checkobject(L, lua_upvalueindex(1));
+	Noise *n = o->noise;
+	size_t i = lua_tointeger(L, 2)-1;
+	lua_Number ni = n->result[i];
+
+	lua_pushnumber(L, ni);
+	return 1;
+}
+
+int LuaPerlinNoiseMap::l_get2dMap_flat(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaPerlinNoiseMap *o = checkobject(L, 1);
+	v2f p                = check_v2f(L, 2);
+
+	Noise *n = o->noise;
+	n->perlinMap2D(p.X, p.Y);
+
+	lua_newuserdata(L, 0);
+	lua_newtable(L);
+
+	lua_pushliteral(L, "__index");
+	lua_pushvalue(L, 1);
+	lua_pushcclosure(L, l_get2dMap_flat_helper, 1);
+	lua_settable(L, -3);
+
+	lua_setmetatable(L, -2);
+
+	return 1;
+}
 
 int LuaPerlinNoiseMap::l_get3dMap(lua_State *L)
 {
@@ -240,7 +275,7 @@ int LuaPerlinNoiseMap::l_get3dMap(lua_State *L)
 }
 
 
-int LuaPerlinNoiseMap::l_get3dMap_flat(lua_State *L)
+int LuaPerlinNoiseMap::l_get3dMap_flat2(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
@@ -268,6 +303,44 @@ int LuaPerlinNoiseMap::l_get3dMap_flat(lua_State *L)
 	return 1;
 }
 
+int LuaPerlinNoiseMap::l_get3dMap_flat_helper(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaPerlinNoiseMap *o = checkobject(L, lua_upvalueindex(1));
+	Noise *n = o->noise;
+	size_t i = lua_tointeger(L, 2)-1;
+	lua_Number ni = n->result[i];
+
+	lua_pushnumber(L, ni);
+	return 1;
+}
+
+int LuaPerlinNoiseMap::l_get3dMap_flat(lua_State *L)
+{
+	NO_MAP_LOCK_REQUIRED;
+
+	LuaPerlinNoiseMap *o = checkobject(L, 1);
+	v3f p                = check_v3f(L, 2);
+
+	if (!o->m_is3d)
+		return 0;
+
+	Noise *n = o->noise;
+	n->perlinMap3D(p.X, p.Y, p.Z);
+
+	lua_newuserdata(L, 0);
+	lua_newtable(L);
+
+	lua_pushliteral(L, "__index");
+	lua_pushvalue(L, 1);
+	lua_pushcclosure(L, l_get3dMap_flat_helper, 1);
+	lua_settable(L, -3);
+
+	lua_setmetatable(L, -2);
+
+	return 1;
+}
 
 int LuaPerlinNoiseMap::l_calc2dMap(lua_State *L)
 {
@@ -391,9 +464,11 @@ const char LuaPerlinNoiseMap::className[] = "PerlinNoiseMap";
 const luaL_Reg LuaPerlinNoiseMap::methods[] = {
 	luamethod(LuaPerlinNoiseMap, get2dMap),
 	luamethod(LuaPerlinNoiseMap, get2dMap_flat),
+	luamethod(LuaPerlinNoiseMap, get2dMap_flat2),
 	luamethod(LuaPerlinNoiseMap, calc2dMap),
 	luamethod(LuaPerlinNoiseMap, get3dMap),
 	luamethod(LuaPerlinNoiseMap, get3dMap_flat),
+	luamethod(LuaPerlinNoiseMap, get3dMap_flat2),
 	luamethod(LuaPerlinNoiseMap, calc3dMap),
 	luamethod(LuaPerlinNoiseMap, getMapSlice),
 	{0,0}
