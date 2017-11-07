@@ -214,7 +214,7 @@ int LuaPerlinNoiseMap::l_get2dMap_flat_helper(lua_State *L)
 
 	LuaPerlinNoiseMap *o = checkobject(L, lua_upvalueindex(1));
 	Noise *n = o->noise;
-	lua_Integer i = lua_tointeger(L, 2)-1;
+	size_t i = lua_tointeger(L, 2)-1;
 	lua_Number ni = n->result[i];
 
 	lua_pushnumber(L, ni);
@@ -231,7 +231,7 @@ int LuaPerlinNoiseMap::l_get2dMap_flat(lua_State *L)
 	Noise *n = o->noise;
 	n->perlinMap2D(p.X, p.Y);
 
-	lua_newtable(L);
+	lua_newuserdata(L, 0);
 	lua_newtable(L);
 
 	lua_pushliteral(L, "__index");
@@ -309,7 +309,7 @@ int LuaPerlinNoiseMap::l_get3dMap_flat_helper(lua_State *L)
 
 	LuaPerlinNoiseMap *o = checkobject(L, lua_upvalueindex(1));
 	Noise *n = o->noise;
-	lua_Integer i = lua_tointeger(L, 2)-1;
+	size_t i = lua_tointeger(L, 2)-1;
 	lua_Number ni = n->result[i];
 
 	lua_pushnumber(L, ni);
@@ -329,7 +329,7 @@ int LuaPerlinNoiseMap::l_get3dMap_flat(lua_State *L)
 	Noise *n = o->noise;
 	n->perlinMap3D(p.X, p.Y, p.Z);
 
-	lua_newtable(L);
+	lua_newuserdata(L, 0);
 	lua_newtable(L);
 
 	lua_pushliteral(L, "__index");
